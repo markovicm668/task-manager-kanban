@@ -24,4 +24,16 @@ class BoardController extends Controller
 
         return response()->json($board, 201);
     }
+
+    public function show($id)
+    {
+        $board = Board::findOrFail($id);
+        return response()->json($board);
+    }
+
+    public function tasks($id)
+    {
+        $board = Board::findOrFail($id);
+        return response()->json($board->tasks);
+    }
 }
