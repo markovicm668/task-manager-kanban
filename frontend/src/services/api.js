@@ -13,3 +13,25 @@ export async function createBoard(name) {
   });
   return res.json();
 }
+
+export async function getBoard(id) {
+  const res = await fetch(`${API_URL}/boards/${id}`);
+  return res.json();
+}
+
+export async function getBoardTasks(id) {
+  const res = await fetch(`${API_URL}/boards/${id}/tasks`);
+  return res.json();
+}
+
+export async function createTask(title, boardId) {
+  const res = await fetch(`${API_URL}/tasks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title,
+      board_id: boardId,
+    }),
+  });
+  return res.json();
+}

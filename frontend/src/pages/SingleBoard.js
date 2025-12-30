@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Card from "../components/Card";
+import { getBoard, getBoardTasks } from "../services/api";
 
-const API_URL = "http://127.0.0.1:8000/api";
 
 function SingleBoard() {
     const { id } = useParams();
@@ -10,13 +10,8 @@ function SingleBoard() {
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
-        fetch(`${API_URL}/boards/${id}`)
-            .then((res) => res.json())
-            .then(setBoard);
-
-        fetch(`${API_URL}/boards/${id}/tasks`)
-            .then((res) => res.json())
-            .then(setTasks);
+        getBoard(id).then(setBoard);
+        getBoardTasks(id).then(setTasks);
     }, [id]);
 
     if (!board) return <p>Loading board...</p>;
