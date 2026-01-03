@@ -24,7 +24,7 @@ export async function getBoardTasks(id) {
   return res.json();
 }
 
-export async function createTask(title, boardId) {
+export async function createTask(title, boardId ) {
   const res = await fetch(`${API_URL}/tasks`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
