@@ -17,6 +17,12 @@ function SingleBoard() {
         getBoardTasks(id).then(setTasks);
     }, [id]);
 
+    const COLUMNS = [
+        { key: "todo", title: "To Do" },
+        { key: "doing", title: "Doing" },
+        { key: "done", title: "Done" },
+    ];
+
     const handleAddTask = async () => {
         if (!name.trim()) return;
 
@@ -29,6 +35,13 @@ function SingleBoard() {
             console.error("Failed to create task:", err);
         }
     };
+
+    const tasksByStatus = {
+        todo: tasks.filter(t => t.status === "todo"),
+        doing: tasks.filter(t => t.status === "doing"),
+        done: tasks.filter(t => t.status === "done"),
+    };
+
 
     if (!board) return <p>Loading board...</p>;
 
@@ -49,12 +62,25 @@ function SingleBoard() {
 
             {tasks.length === 0 && <p>No tasks yet.</p>}
 
-            {tasks.map((task) => (
-                <Card key={task.id}>
-                    <strong>{task.title}</strong>
-                    <div>Status: {task.status}</div>
-                </Card>
-            ))}
+            <div style={{ display: "flex", gap: "20px" }}>
+                {COLUMNS.map(column => (
+                    <div key={column.key} style={{ width: "300px" }}>
+                        <h3>{column.title}</h3>
+
+                        {tasksByStatus[column.key].length === 0 && (
+                            <p>No tasks</p>
+                        )}
+
+                        {tasksByStatus[column.key].map(task => (
+                            <Card key={task.id}>
+                                <strong>{task.title}</strong>
+                                <div>Status: {task.status}</div>
+                            </Card>
+                        ))}
+                    </div>
+                ))}
+            </div>
+
         </div>
     );
 }
