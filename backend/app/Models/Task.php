@@ -11,7 +11,8 @@ class Task extends Model
 
     protected $fillable = [
         'title',
-        'board_id'
+        'board_id',
+        'status'
     ];
 
     public function board()

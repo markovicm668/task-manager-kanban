@@ -16,3 +16,4 @@ Route::get('/tasks', [TaskController::class, 'index']);
 Route::post('/tasks', [TaskController::class, 'store']);
 Route::get('/boards/{id}', [BoardController::class, 'show']);
 Route::get('/boards/{id}/tasks', [BoardController::class, 'tasks']);
+Route::patch('/boards/{id}/tasks', [TaskController::class, 'update']);
