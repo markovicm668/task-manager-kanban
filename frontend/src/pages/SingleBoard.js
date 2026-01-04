@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Card from "../components/Card";
-import { getBoard, getBoardTasks, createTask } from "../services/api";
+import * as api from "../services/api";
 import Input from "../components/Input";
 import Button from "../components/Button";
 
@@ -13,8 +13,8 @@ function SingleBoard() {
     const [name, setName] = useState("");
 
     useEffect(() => {
-        getBoard(id).then(setBoard);
-        getBoardTasks(id).then(setTasks);
+        api.getBoard(id).then(setBoard);
+        api.getBoardTasks(id).then(setTasks);
     }, [id]);
 
     const COLUMNS = [
@@ -27,7 +27,7 @@ function SingleBoard() {
         if (!name.trim()) return;
 
         try {
-            const newTask = await createTask(name, id);
+            const newTask = await api.createTask(name, id);
 
             setName("");
             setTasks([newTask, ...tasks]);
@@ -40,6 +40,14 @@ function SingleBoard() {
         todo: tasks.filter(t => t.status === "todo"),
         doing: tasks.filter(t => t.status === "doing"),
         done: tasks.filter(t => t.status === "done"),
+    };
+
+    const moveTask = async (taskId, status) => {
+        const updatedTask = await api.updateTaskStatus(taskId, status);
+
+        setTasks(tasks.map(t =>
+            t.id === taskId ? updatedTask : t
+        ));
     };
 
 
@@ -73,6 +81,13 @@ function SingleBoard() {
 
                         {tasksByStatus[column.key].map(task => (
                             <Card key={task.id}>
+
+                                <div>
+                                    <Button onClick={() => moveTask(task.id, "todo")}>To Do</Button>
+                                    <Button onClick={() => moveTask(task.id, "doing")}>Doing</Button>
+                                    <Button onClick={() => moveTask(task.id, "done")}>Done</Button>
+                                </div>
+
                                 <strong>{task.title}</strong>
                                 <div>Status: {task.status}</div>
                             </Card>
