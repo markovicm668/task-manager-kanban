@@ -32,11 +32,35 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         $validated = $request->validate([
-            'status' => 'required|in:todo,doing,done'
+            'title' => 'sometimes|string|max:255',
+            'status' => 'sometimes|in:todo,doing,done'
         ]);
 
         $task->update($validated);
 
         return response()->json($task);
     }
+
+
+    public function show(Task $task)
+    {
+        return response()->json($task);
+    }
+
+    public function destroy(Task $task)
+    {
+        $task->delete();
+        return response()->json(null, 204);
+    }
+
+    // public function updateStatus(Request $request, Task $task)
+    // {
+    //     $validated = $request->validate([
+    //         'status' => 'required|in:todo,doing,done'
+    //     ]);
+
+    //     $task->update($validated);
+
+    //     return response()->json($task);
+    // }
 }

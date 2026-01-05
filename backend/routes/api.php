@@ -12,8 +12,11 @@ Route::get('/hello', function () {
 
 Route::get('/boards', [BoardController::class, 'index']);
 Route::post('/boards', [BoardController::class, 'store']);
-Route::get('/tasks', [TaskController::class, 'index']);
-Route::post('/tasks', [TaskController::class, 'store']);
 Route::get('/boards/{id}', [BoardController::class, 'show']);
 Route::get('/boards/{id}/tasks', [BoardController::class, 'tasks']);
-Route::patch('/tasks/{task}', [TaskController::class, 'update']);
+
+// Route::get('/tasks', [TaskController::class, 'index']);
+// Route::post('/tasks', [TaskController::class, 'store']);
+// Route::patch('/tasks/{task}', [TaskController::class, 'update']);
+
+Route::apiResource('tasks', TaskController::class);
