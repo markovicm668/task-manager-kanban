@@ -50,6 +50,18 @@ function SingleBoard() {
         ));
     };
 
+    const handleDeleteTask = async (taskId) => {
+        try {
+            await api.deleteTask(taskId);
+
+            setTasks(tasks => tasks.filter(t => t.id !== taskId));
+        } catch (error) {
+            console.log("Failed to delete task", error);
+            
+        }
+
+    }
+
 
     if (!board) return <p>Loading board...</p>;
 
@@ -90,6 +102,11 @@ function SingleBoard() {
 
                                 <strong>{task.title}</strong>
                                 <div>Status: {task.status}</div>
+
+
+                                <div>
+                                    <Button onClick={() => handleDeleteTask(task.id)}>DELETE</Button>
+                                </div>
                             </Card>
                         ))}
                     </div>
