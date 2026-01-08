@@ -57,7 +57,7 @@ function SingleBoard() {
             setTasks(tasks => tasks.filter(t => t.id !== taskId));
         } catch (error) {
             console.log("Failed to delete task", error);
-            
+
         }
 
     }
@@ -66,7 +66,7 @@ function SingleBoard() {
     if (!board) return <p>Loading board...</p>;
 
     return (
-        <div>
+        <div className="board-container">
             <h1>SINGLE BOARD PAGE</h1>
             <h2>{board.name}</h2>
 
@@ -82,9 +82,10 @@ function SingleBoard() {
 
             {tasks.length === 0 && <p>No tasks yet.</p>}
 
-            <div style={{ display: "flex", gap: "20px" }}>
+            <div className="kanban">
                 {COLUMNS.map(column => (
-                    <div key={column.key} style={{ width: "300px" }}>
+                    <div className={`column ${column.key}`} key={column.key}>
+
                         <h3>{column.title}</h3>
 
                         {tasksByStatus[column.key].length === 0 && (
@@ -92,20 +93,14 @@ function SingleBoard() {
                         )}
 
                         {tasksByStatus[column.key].map(task => (
-                            <Card key={task.id}>
-
-                                <div>
-                                    <Button onClick={() => moveTask(task.id, "todo")}>To Do</Button>
-                                    <Button onClick={() => moveTask(task.id, "doing")}>Doing</Button>
-                                    <Button onClick={() => moveTask(task.id, "done")}>Done</Button>
-                                </div>
-
+                            <Card className="card" key={task.id}>
                                 <strong>{task.title}</strong>
-                                <div>Status: {task.status}</div>
 
-
-                                <div>
-                                    <Button onClick={() => handleDeleteTask(task.id)}>DELETE</Button>
+                                <div className="actions">
+                                    <Button onClick={() => moveTask(task.id, "todo")} className="primary">To Do</Button>
+                                    <Button onClick={() => moveTask(task.id, "doing")} className="primary">Doing</Button>
+                                    <Button onClick={() => moveTask(task.id, "done")} className="primary">Done</Button>
+                                    <Button onClick={() => handleDeleteTask(task.id)} className="danger">DELETE</Button>
                                 </div>
                             </Card>
                         ))}
@@ -114,6 +109,8 @@ function SingleBoard() {
             </div>
 
         </div>
+
+
     );
 }
 

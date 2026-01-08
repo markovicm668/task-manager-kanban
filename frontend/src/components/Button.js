@@ -1,13 +1,6 @@
-function Button({ children, onClick, disabled = false }) {
+function Button({ children, onClick, className }) {
     return (
-        <button
-            onClick={onClick}
-            disabled={disabled}
-            style={{
-                padding: "6px 12px",
-                cursor: disabled ? "not-allowed" : "pointer",
-            }}
-        >
+        <button onClick={onClick} className={className}>
             {children}
         </button>
     );

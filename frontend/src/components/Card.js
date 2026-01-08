@@ -1,12 +1,12 @@
-function Card({ children, onClick }) {
-    return <div
-        onClick={onClick}
-        style={{
-            border: "1px solid #ccc", padding: "10px"
-        }}
-    >
-        {children}
-    </div>;
+function Card({ children, onClick, className = "" }) {
+    return (
+        <div
+            onClick={onClick}
+            className={`card ${className}`}
+        >
+            {children}
+        </div>
+    );
 }
 
 export default Card;

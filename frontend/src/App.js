@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Boards from "./pages/Boards";
 import SingleBoard from "./pages/SingleBoard";
+import "./styles/app.scss";
 
 function App() {
   return (
