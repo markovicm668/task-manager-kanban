@@ -30,7 +30,7 @@ function SingleBoard() {
             const newTask = await api.createTask(name, id);
 
             setName("");
-            setTasks([newTask, ...tasks]);
+            setTasks([...tasks, newTask]);
         } catch (err) {
             console.error("Failed to create task:", err);
         }
@@ -67,8 +67,7 @@ function SingleBoard() {
 
     return (
         <div className="board-container">
-            <h1>SINGLE BOARD PAGE</h1>
-            <h2>{board.name}</h2>
+            <h1>{board.name}</h1>
 
             <div>
                 <Input
@@ -79,8 +78,6 @@ function SingleBoard() {
                 <Button onClick={handleAddTask}> Add task </Button>
             </div>
             <h3>Tasks</h3>
-
-            {tasks.length === 0 && <p>No tasks yet.</p>}
 
             <div className="kanban">
                 {COLUMNS.map(column => (
