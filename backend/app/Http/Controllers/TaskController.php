@@ -52,15 +52,4 @@ class TaskController extends Controller
         $task->delete();
         return response()->json(null, 204);
     }
-
-    // public function updateStatus(Request $request, Task $task)
-    // {
-    //     $validated = $request->validate([
-    //         'status' => 'required|in:todo,doing,done'
-    //     ]);
-
-    //     $task->update($validated);
-
-    //     return response()->json($task);
-    // }
 }
