@@ -5,16 +5,18 @@ import * as api from "../services/api";
 import Input from "../components/Input";
 import Button from "../components/Button";
 
-
 function SingleBoard() {
     const { id } = useParams();
     const [board, setBoard] = useState(null);
     const [tasks, setTasks] = useState([]);
     const [name, setName] = useState("");
+    const [users, setUsers] = useState([]);
+
 
     useEffect(() => {
         api.getBoard(id).then(setBoard);
         api.getBoardTasks(id).then(setTasks);
+        api.getUsers().then(setUsers);
     }, [id]);
 
     const COLUMNS = [
@@ -43,7 +45,7 @@ function SingleBoard() {
     };
 
     const moveTask = async (taskId, status) => {
-        const updatedTask = await api.updateTaskStatus(taskId, status);
+        const updatedTask = await api.updateTask(taskId, status);
 
         setTasks(tasks.map(t =>
             t.id === taskId ? updatedTask : t
@@ -62,6 +64,13 @@ function SingleBoard() {
 
     }
 
+    const assignUser = async (taskId, userId) => {
+        const updatedTask = await api.updateTask(taskId, { user_id: userId });
+
+        setTasks(tasks.map(t =>
+            t.id === taskId ? updatedTask : t
+        ));
+    };
 
     if (!board) return <p>Loading board...</p>;
 
@@ -92,6 +101,20 @@ function SingleBoard() {
                         {tasksByStatus[column.key].map(task => (
                             <Card className="card" key={task.id}>
                                 <strong>{task.title}</strong>
+
+                                <div className="task-assign">
+                                    <select
+                                        value={task.user_id || ""}
+                                        onChange={(e) => assignUser(task.id, e.target.value)}
+                                    >
+                                        <option value="">Unassigned</option>
+                                        {users.map(u => (
+                                            <option key={u.id} value={u.id}>
+                                                {u.name} ({u.role})
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
 
                                 <div className="actions">
                                     <Button onClick={() => moveTask(task.id, "todo")} className="primary">To Do</Button>

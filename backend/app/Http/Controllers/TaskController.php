@@ -17,7 +17,10 @@ class TaskController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'board_id' => 'required|exists:boards,id',
-            'status' => 'in:todo,doing,done'
+            'status' => 'in:todo,doing,done',
+            'user_id' => 'nullable|exists:users,id',
+            'category' => 'nullable|string',
+            'due_date' => 'nullable|date'
         ]);
 
         $task = Task::create([
@@ -32,8 +35,10 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         $validated = $request->validate([
-            'title' => 'sometimes|string|max:255',
-            'status' => 'sometimes|in:todo,doing,done'
+            'status' => 'in:todo,doing,done',
+            'user_id' => 'nullable|exists:users,id',
+            'category' => 'nullable|string',
+            'due_date' => 'nullable|date'
         ]);
 
         $task->update($validated);

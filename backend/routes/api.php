@@ -26,3 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('tasks', TaskController::class)->except(['index', 'show']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+
+Route::middleware('auth:sanctum')->get('/users', function () {
+    return \App\Models\User::select('id', 'name', 'role')->get();
+});

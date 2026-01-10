@@ -13,7 +13,15 @@ class Task extends Model
         'title',
         'board_id',
         'status',
+        'user_id',
+        'category',
+        'due_date'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function board()
     {

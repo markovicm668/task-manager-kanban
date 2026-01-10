@@ -58,19 +58,17 @@ export async function createTask(title, boardId) {
 }
 
 
-export async function updateTaskStatus(id, status) {
+export async function updateTask(id, data) {
   const res = await fetch(`${API_URL}/tasks/${id}`, {
     method: "PATCH",
     headers: authHeaders(),
-    body: JSON.stringify({ status }),
+    body: JSON.stringify(data),
   });
 
-  if (!res.ok) {
-    throw new Error("Failed to update task");
-  }
-
+  if (!res.ok) throw new Error("Update failed");
   return res.json();
 }
+
 
 
 export async function deleteTask(id) {
@@ -121,4 +119,13 @@ export async function logoutUser() {
   });
 
   localStorage.removeItem("token");
+}
+
+export async function getUsers() {
+  const res = await fetch(`${API_URL}/users`, {
+    headers: authHeaders(),
+  });
+
+  if (!res.ok) throw new Error("Failed to load users");
+  return res.json();
 }
