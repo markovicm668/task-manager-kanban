@@ -9,7 +9,9 @@ class TaskController extends Controller
 {
     public function index()
     {
-        return response()->json(Task::all());
+        return response()->json(
+            Task::with('category')->get()
+        );
     }
 
     public function store(Request $request)
@@ -19,7 +21,7 @@ class TaskController extends Controller
             'board_id' => 'required|exists:boards,id',
             'status' => 'in:todo,doing,done',
             'user_id' => 'nullable|exists:users,id',
-            'category' => 'nullable|string',
+            'category_id' => 'nullable|exists:categories,id',
             'due_date' => 'nullable|date'
         ]);
 
@@ -27,9 +29,12 @@ class TaskController extends Controller
             'title' => $validated['title'],
             'board_id' => $validated['board_id'],
             'status' => $validated['status'] ?? 'todo',
+            'user_id' => $validated['user_id'] ?? null,
+            'category_id' => $validated['category_id'] ?? null,
+            'due_date' => $validated['due_date'] ?? null,
         ]);
 
-        return response()->json($task, 201);
+        return response()->json($task->load('category'), 201);
     }
 
     public function update(Request $request, Task $task)
@@ -37,19 +42,20 @@ class TaskController extends Controller
         $validated = $request->validate([
             'status' => 'in:todo,doing,done',
             'user_id' => 'nullable|exists:users,id',
-            'category' => 'nullable|string',
+            'category_id' => 'nullable|exists:categories,id',
             'due_date' => 'nullable|date'
         ]);
 
         $task->update($validated);
 
-        return response()->json($task);
+        return response()->json($task->load('category'));
     }
-
 
     public function show(Task $task)
     {
-        return response()->json($task);
+        return response()->json(
+            $task->load('category')
+        );
     }
 
     public function destroy(Task $task)
