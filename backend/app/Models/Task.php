@@ -14,7 +14,7 @@ class Task extends Model
         'board_id',
         'status',
         'user_id',
-        'category',
+        'category_id', // Added category_id, insane bug
         'due_date'
     ];
 

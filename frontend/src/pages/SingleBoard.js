@@ -11,12 +11,14 @@ function SingleBoard() {
     const [tasks, setTasks] = useState([]);
     const [name, setName] = useState("");
     const [users, setUsers] = useState([]);
-
+    const [categories, setCategories] = useState([]);
+    const [categoryId, setCategoryId] = useState("");
 
     useEffect(() => {
         api.getBoard(id).then(setBoard);
         api.getBoardTasks(id).then(setTasks);
         api.getUsers().then(setUsers);
+        api.fetchCategories().then(setCategories);
     }, [id]);
 
     const COLUMNS = [
@@ -29,10 +31,11 @@ function SingleBoard() {
         if (!name.trim()) return;
 
         try {
-            const newTask = await api.createTask(name, id);
+            const newTask = await api.createTask(name, id, categoryId || null);
 
             setName("");
             setTasks([...tasks, newTask]);
+            setCategoryId("");
         } catch (err) {
             console.error("Failed to create task:", err);
         }
@@ -45,7 +48,7 @@ function SingleBoard() {
     };
 
     const moveTask = async (taskId, status) => {
-        const updatedTask = await api.updateTask(taskId, status);
+        const updatedTask = await api.updateTask(taskId, { status });
 
         setTasks(tasks.map(t =>
             t.id === taskId ? updatedTask : t
@@ -84,6 +87,19 @@ function SingleBoard() {
                     onChange={setName}
                     placeholder="Task name"
                 />
+
+                <select
+                    value={categoryId}
+                    onChange={(e) => setCategoryId(e.target.value)}
+                >
+                    <option value="">No category</option>
+                    {categories.map(cat => (
+                        <option key={cat.id} value={cat.id}>
+                            {cat.name}
+                        </option>
+                    ))}
+                </select>
+
                 <Button onClick={handleAddTask}> Add task </Button>
             </div>
             <h3>Tasks</h3>
@@ -101,6 +117,31 @@ function SingleBoard() {
                         {tasksByStatus[column.key].map(task => (
                             <Card className="card" key={task.id}>
                                 <strong>{task.title}</strong>
+
+                                <select
+                                    value={task.category_id || ""}
+                                    onChange={(e) => {
+                                        const value = e.target.value || null;
+
+                                        api.updateTask(task.id, { category_id: value })
+                                            .then(updated => {
+                                                setTasks(prev =>
+                                                    prev.map(t =>
+                                                        t.id === task.id ? updated : t
+                                                    )
+                                                );
+                                            });
+                                    }}
+
+                                >
+                                    <option value="">No category</option>
+                                    {categories.map(cat => (
+                                        <option key={cat.id} value={cat.id}>
+                                            {cat.name}
+                                        </option>
+                                    ))}
+                                </select>
+
 
                                 <div className="task-assign">
                                     <select

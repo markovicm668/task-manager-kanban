@@ -32,7 +32,6 @@ export async function createBoard(name) {
   return res.json();
 }
 
-
 export async function getBoard(id) {
   const res = await fetch(`${API_URL}/boards/${id}`);
   return res.json();
@@ -43,20 +42,23 @@ export async function getBoardTasks(id) {
   return res.json();
 }
 
-export async function createTask(title, boardId) {
-  const res = await fetch(`${API_URL}/tasks`, {
-    method: "POST",
+export const createTask = async (title, boardId, categoryId) => {
+  const response = await fetch(`${API_URL}/tasks`, {
+    method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify({
       title,
       board_id: boardId,
-    }),
+      category_id: categoryId || null
+    })
   });
 
-  if (!res.ok) throw new Error("Unauthorized");
-  return res.json();
-}
+  if (!response.ok) {
+    throw new Error("Failed to create task");
+  }
 
+  return response.json();
+};
 
 export async function updateTask(id, data) {
   const res = await fetch(`${API_URL}/tasks/${id}`, {
@@ -68,8 +70,6 @@ export async function updateTask(id, data) {
   if (!res.ok) throw new Error("Update failed");
   return res.json();
 }
-
-
 
 export async function deleteTask(id) {
   const res = await fetch(`${API_URL}/tasks/${id}`, {
@@ -127,5 +127,14 @@ export async function getUsers() {
   });
 
   if (!res.ok) throw new Error("Failed to load users");
+  return res.json();
+}
+
+export async function fetchCategories() {
+  const res = await fetch(`${API_URL}/categories`, {
+    headers: authHeaders(),
+  });
+
+  if (!res.ok) throw new Error("Failed to fetch categories");
   return res.json();
 }
