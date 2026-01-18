@@ -110,3 +110,61 @@ button {
         border: 1px solid #ccc;
     }
 }
+
+.card {
+    padding: 12px;
+    border-radius: 10px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.task-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    select {
+        font-size: 12px;
+        padding: 4px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+}
+
+.task-title {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.task-meta {
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    gap: 8px;
+}
+
+.task-controls {
+    display: flex;
+    gap: 6px;
+
+    select,
+    input {
+        font-size: 12px;
+        padding: 4px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+}
+
+.task-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-actions {
+    display: flex;
+    gap: 6px;
+}

@@ -42,14 +42,15 @@ export async function getBoardTasks(id) {
   return res.json();
 }
 
-export const createTask = async (title, boardId, categoryId) => {
+export const createTask = async (title, boardId, categoryId, dueDate) => {
   const response = await fetch(`${API_URL}/tasks`, {
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify({
       title,
       board_id: boardId,
-      category_id: categoryId || null
+      category_id: categoryId,
+      due_date: dueDate,
     })
   });
 

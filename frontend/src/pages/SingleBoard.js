@@ -13,6 +13,7 @@ function SingleBoard() {
     const [users, setUsers] = useState([]);
     const [categories, setCategories] = useState([]);
     const [categoryId, setCategoryId] = useState("");
+    const [dueDate, setDueDate] = useState("");
 
     useEffect(() => {
         api.getBoard(id).then(setBoard);
@@ -31,11 +32,17 @@ function SingleBoard() {
         if (!name.trim()) return;
 
         try {
-            const newTask = await api.createTask(name, id, categoryId || null);
+            const newTask = await api.createTask(
+                name,
+                id,
+                categoryId || null,
+                dueDate || null
+            );
 
             setName("");
             setTasks([...tasks, newTask]);
             setCategoryId("");
+            setDueDate("");
         } catch (err) {
             console.error("Failed to create task:", err);
         }
@@ -116,34 +123,11 @@ function SingleBoard() {
 
                         {tasksByStatus[column.key].map(task => (
                             <Card className="card" key={task.id}>
-                                <strong>{task.title}</strong>
 
-                                <select
-                                    value={task.category_id || ""}
-                                    onChange={(e) => {
-                                        const value = e.target.value || null;
-
-                                        api.updateTask(task.id, { category_id: value })
-                                            .then(updated => {
-                                                setTasks(prev =>
-                                                    prev.map(t =>
-                                                        t.id === task.id ? updated : t
-                                                    )
-                                                );
-                                            });
-                                    }}
-
-                                >
-                                    <option value="">No category</option>
-                                    {categories.map(cat => (
-                                        <option key={cat.id} value={cat.id}>
-                                            {cat.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                <div className="task-header">
+                                    <div className="task-title">{task.title}</div>
 
 
-                                <div className="task-assign">
                                     <select
                                         value={task.user_id || ""}
                                         onChange={(e) => assignUser(task.id, e.target.value)}
@@ -157,14 +141,67 @@ function SingleBoard() {
                                     </select>
                                 </div>
 
-                                <div className="actions">
-                                    <Button onClick={() => moveTask(task.id, "todo")} className="primary">To Do</Button>
-                                    <Button onClick={() => moveTask(task.id, "doing")} className="primary">Doing</Button>
-                                    <Button onClick={() => moveTask(task.id, "done")} className="primary">Done</Button>
-                                    <Button onClick={() => handleDeleteTask(task.id)} className="danger">DELETE</Button>
+                                <div className="task-controls">
+                                    <select
+                                        value={task.category_id || ""}
+                                        onChange={(e) => {
+                                            const value = e.target.value || null;
+
+                                            api.updateTask(task.id, { category_id: value })
+                                                .then(updated => {
+                                                    setTasks(prev =>
+                                                        prev.map(t =>
+                                                            t.id === task.id ? updated : t
+                                                        )
+                                                    );
+                                                });
+                                        }}
+                                    >
+                                        <option value="">No category</option>
+                                        {categories.map(cat => (
+                                            <option key={cat.id} value={cat.id}>
+                                                {cat.name}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    <input
+                                        type="date"
+                                        value={task.due_date || ""}
+                                        onChange={(e) => {
+                                            const value = e.target.value || null;
+
+                                            api.updateTask(task.id, { due_date: value })
+                                                .then(updated => {
+                                                    setTasks(prev =>
+                                                        prev.map(t =>
+                                                            t.id === task.id ? updated : t
+                                                        )
+                                                    );
+                                                });
+                                        }}
+                                    />
                                 </div>
+
+                                <div className="task-actions">
+                                    <div className="status-actions">
+                                        <Button onClick={() => moveTask(task.id, "todo")} className="primary">To Do</Button>
+                                        <Button onClick={() => moveTask(task.id, "doing")} className="primary">Doing</Button>
+                                        <Button onClick={() => moveTask(task.id, "done")} className="primary">Done</Button>
+                                    </div>
+
+                                    <Button
+                                        onClick={() => handleDeleteTask(task.id)}
+                                        className="danger"
+                                    >
+                                        Delete
+                                    </Button>
+                                </div>
+
                             </Card>
                         ))}
+
+
                     </div>
                 ))}
             </div>
