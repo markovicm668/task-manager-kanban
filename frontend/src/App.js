@@ -5,6 +5,7 @@ import "./styles/app.scss";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Navbar from "./components/NavBar";
+import Calendar from "./pages/Calendar";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/boards/:id" element={<SingleBoard />} />
+        <Route path="/calendar" element={<Calendar />} />
       </Routes>
     </BrowserRouter>
   );

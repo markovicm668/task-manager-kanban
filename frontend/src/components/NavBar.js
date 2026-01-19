@@ -35,6 +35,11 @@ function Navbar() {
                 <button className="danger" onClick={handleLogout}>
                     Logout
                 </button>
+
+                <button onClick={() => navigate("/calendar")}>
+                    Calendar
+                </button>
+
             </div>
         </div>
     );

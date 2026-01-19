@@ -168,3 +168,20 @@ button {
     display: flex;
     gap: 6px;
 }
+
+.calendar-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.calendar-day {
+    margin-bottom: 24px;
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 8px;
+}
+
+.calendar-day h3 {
+    margin-bottom: 8px;
+}
