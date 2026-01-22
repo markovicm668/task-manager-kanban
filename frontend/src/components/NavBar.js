@@ -6,13 +6,12 @@ function Navbar() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
 
-    if (!user) return null; // hide navbar if not logged in
+    if (!user) return null;
 
     const handleLogout = async () => {
         try {
             await logoutUser();
         } catch (e) {
-            // even if backend fails, clear frontend auth
         } finally {
             logout();
             navigate("/login");
@@ -32,14 +31,13 @@ function Navbar() {
                     {user.name} ({user.role})
                 </span>
 
-                <button className="danger" onClick={handleLogout}>
-                    Logout
-                </button>
-
                 <button onClick={() => navigate("/calendar")}>
                     Calendar
                 </button>
 
+                <button className="danger" onClick={handleLogout}>
+                    Logout
+                </button>
             </div>
         </div>
     );

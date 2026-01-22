@@ -6,12 +6,9 @@ function Calendar() {
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
-        // Load ALL tasks (simplest version)
         api.getBoardTasks(1).then(setTasks);
-        // ⬆️ If you want per-board later, we can improve this
     }, []);
 
-    // Group tasks by date
     const tasksByDate = tasks.reduce((acc, task) => {
         if (!task.due_date) return acc;
 

@@ -4,6 +4,7 @@ import Card from "../components/Card";
 import * as api from "../services/api";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import Notifications from "../components/Notifications";
 
 function SingleBoard() {
     const { id } = useParams();
@@ -75,18 +76,25 @@ function SingleBoard() {
     }
 
     const assignUser = async (taskId, userId) => {
-        const updatedTask = await api.updateTask(taskId, { user_id: userId });
+        const value = userId === "" ? null : Number(userId);
 
-        setTasks(tasks.map(t =>
-            t.id === taskId ? updatedTask : t
-        ));
+        const updatedTask = await api.updateTask(taskId, { user_id: value });
+
+        setTasks(prev =>
+            prev.map(t =>
+                t.id === taskId ? updatedTask : t
+            )
+        );
     };
 
     if (!board) return <p>Loading board...</p>;
 
     return (
         <div className="board-container">
+
             <h1>{board.name}</h1>
+
+            <Notifications tasks={tasks} />
 
             <div>
                 <Input
