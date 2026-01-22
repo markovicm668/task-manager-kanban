@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/boards', [BoardController::class, 'store']);
     Route::apiResource('tasks', TaskController::class)->except(['index', 'show']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::delete('/boards/{id}', [BoardController::class, 'destroy']);
 });
 
 Route::middleware('auth:sanctum')->get('/users', function () {

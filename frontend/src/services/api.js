@@ -26,7 +26,8 @@ export async function createBoard(name) {
   });
 
   if (!res.ok) {
-    throw new Error("Unauthorized");
+    const error = await res.json();
+    throw new Error(error.message || "Unauthorized");
   }
 
   return res.json();
@@ -138,4 +139,16 @@ export async function fetchCategories() {
 
   if (!res.ok) throw new Error("Failed to fetch categories");
   return res.json();
+}
+
+export async function deleteBoard(id) {
+  const res = await fetch(`${API_URL}/boards/${id}`, {
+    method: "DELETE",
+    headers: authHeaders(),
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Failed to delete board");
+  }
 }

@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import * as api from "../services/api";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Notifications from "../components/Notifications";
+import { useAuth } from "../context/AuthContext";
 
 function SingleBoard() {
     const { id } = useParams();
+    const navigate = useNavigate();
+    const { user } = useAuth();
     const [board, setBoard] = useState(null);
     const [tasks, setTasks] = useState([]);
     const [name, setName] = useState("");
@@ -15,6 +18,7 @@ function SingleBoard() {
     const [categories, setCategories] = useState([]);
     const [categoryId, setCategoryId] = useState("");
     const [dueDate, setDueDate] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
         api.getBoard(id).then(setBoard);
@@ -46,6 +50,20 @@ function SingleBoard() {
             setDueDate("");
         } catch (err) {
             console.error("Failed to create task:", err);
+        }
+    };
+
+    const handleDeleteBoard = async () => {
+        if (!window.confirm("Are you sure you want to delete this board? All tasks will be deleted.")) {
+            return;
+        }
+
+        try {
+            setError("");
+            await api.deleteBoard(id);
+            navigate("/boards");
+        } catch (err) {
+            setError("Failed to delete board. Only Product Owners can delete boards.");
         }
     };
 
@@ -87,12 +105,23 @@ function SingleBoard() {
         );
     };
 
+    const isProductOwner = user?.role === 'product_owner';
+
     if (!board) return <p>Loading board...</p>;
 
     return (
         <div className="board-container">
 
-            <h1>{board.name}</h1>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h1>{board.name}</h1>
+                {isProductOwner && (
+                    <Button onClick={handleDeleteBoard} className="danger">
+                        Delete Board
+                    </Button>
+                )}
+            </div>
+
+            {error && <p style={{ color: 'red' }}>{error}</p>}
 
             <Notifications tasks={tasks} />
 
