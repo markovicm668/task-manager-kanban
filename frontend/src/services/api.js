@@ -110,8 +110,13 @@ export async function loginUser(data) {
     body: JSON.stringify(data),
   });
 
-  if (!res.ok) throw new Error("Login failed");
-  return res.json();
+  const result = await res.json();
+
+  if (!res.ok) {
+    throw new Error(result.message || "Invalid email or password");
+  }
+
+  return result;
 }
 
 export async function logoutUser() {
